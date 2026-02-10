@@ -322,7 +322,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token f77e5596c88cbb183d705e6b032b4945600172c8",
+								"value": "Token {{token}}",
 								"type": "text"
 							},
 							{
