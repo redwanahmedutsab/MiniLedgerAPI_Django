@@ -2,151 +2,162 @@
 
 This is a simple backend REST API built with **Django** and **Django REST Framework**.
 
-The API allows a user to manage customers and keep track of their **credit and debit ledger entries**.
+The API allows users to manage customers and keep track of their **credit and debit ledger entries**.
 
 This project was created as a take-home assignment to demonstrate:
 
 * Django REST API development
-* Authentication
+* Authentication & security
 * Database modeling
-* Basic business logic
+* Basic business logic implementation
 
 ---
 
-## What this project does
+## 🚀 Features
 
-* Users can register and log in
-* Each user can manage **only their own data**
-* Users can:
-* Create customers
-* Add credit/debit ledger entries for each customer
-* View customer balance summary
+* **User Management:** Users can register and log in
+* **Data Ownership:** Each user can manage **only their own data**
+* **Core Functionality:**
+* Create and manage customers
+* Add ledger entries (credit/debit) for each customer
+* View real-time customer balance summaries
 
-
-
-**Credit** → customer owes money
-
-**Debit** → payment received
-
-**Balance is calculated as:**
 
 
 ---
 
-## Tech Stack
+## 💰 Financial Logic
+
+* **Credit:** Customer owes money
+* **Debit:** Payment received from customer
+
+**Balance calculation:**
+`balance = total_credit - total_debit`
+
+---
+
+## 🛠 Tech Stack
 
 * **Language:** Python
-* **Framework:** Django & Django REST Framework
+* **Framework:** Django & Django REST Framework (DRF)
 * **Database:** SQLite (default)
 
 ---
 
-## Project Structure
+## 📂 Project Structure
 
 ```text
 MiniLedgerAPI_Django/
 │
-├── core/                       # Project configuration
-│   ├── settings.py             # App settings & DRF configuration
-│   ├── urls.py                 # Main routing (includes app URLs)
-│   └── wsgi.py
+├── MiniLedgerAPI_Django/        # Project configuration
+│   ├── settings.py             # Django & DRF settings
+│   ├── urls.py                 # Main URL routing
+│   ├── wsgi.py
+│   └── asgi.py
 │
-├── api/                        # Main application logic
-│   ├── migrations/             # Database migrations
-│   ├── models.py               # Customer and LedgerEntry models
-│   ├── serializers.py          # DRF Serializers for JSON conversion
-│   ├── views.py                # API Logic (List, Create, Summary)
-│   ├── urls.py                 # API Endpoints
-│   └── admin.py                # Admin panel configurations
+├── accounts/                   # Authentication (register & login)
+│   ├── serializers.py
+│   ├── views.py
+│   └── urls.py
 │
-├── venv/                       # Virtual environment (ignored by git)
+├── customers/                  # Customer management
+│   ├── models.py
+│   ├── serializers.py
+│   └── views.py
+│
+├── ledger/                     # Ledger entries & summary
+│   ├── models.py
+│   ├── serializers.py
+│   └── views.py
+│
 ├── manage.py                   # Django CLI tool
 ├── requirements.txt            # Project dependencies
-├── Mini Ledger API.json        # Postman collection for testing
-└── db.sqlite3                  # Local database (generated after migration)
+├── README.md
+├── Mini Ledger API.postman_collection.json
+└── db.sqlite3                  # Local database
 
 ```
 
 ---
 
-## How to run the project locally
+## ⚙️ How to Run Locally
 
-### 1. Clone the repository
-
+1. **Clone the repository**
 ```bash
-git clone <your-github-repo-link>
+git clone https://github.com/redwanahmedutsab/MiniLedgerAPI_Django
 cd MiniLedgerAPI_Django
 
 ```
 
-### 2. Create and activate virtual environment
 
+2. **Create and activate virtual environment**
 ```bash
 python -m venv venv
-source venv/bin/activate   # macOS / Linux
-venv\Scripts\activate      # Windows
+# macOS / Linux
+source venv/bin/activate
+# Windows
+venv\Scripts\activate
 
 ```
 
-### 3. Install dependencies
 
+3. **Install dependencies**
 ```bash
 pip install -r requirements.txt
 
 ```
 
-### 4. Run migrations
 
+4. **Run migrations**
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 
 ```
 
-### 5. (Optional) Create admin user
 
-```bash
-python manage.py createsuperuser
-
-```
-
-### 6. Start the server
-
+5. **Start the server**
 ```bash
 python manage.py runserver
 
 ```
 
+
 The server will run at: `http://127.0.0.1:8000/`
 
 ---
 
-## Authentication
+## 🔑 Authentication
 
-This API uses **Token Authentication**. After registering or logging in, include the token in your request headers:
+This API uses **Token Authentication**.
 
+After registering or logging in, include the token in request headers:
 `Authorization: Token <your_token_here>`
 
 ---
 
-## API Endpoints Overview
+## 📡 API Endpoints Overview
 
 ### Authentication
 
-* `POST /api/auth/register/` – Register a new user
-* `POST /api/auth/login/` – Login and get token
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| POST | `/api/auth/register/` | Register a new user |
+| POST | `/api/auth/login/` | Login and obtain token |
 
 ### Customers
 
-* `GET /api/customers/` – List all customers
-* `POST /api/customers/` – Create a new customer
-* `PUT /api/customers/{id}/` – Update customer details
-* `DELETE /api/customers/{id}/` – Delete a customer
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | `/api/customers/` | List all customers |
+| POST | `/api/customers/` | Create a new customer |
+| PUT | `/api/customers/{id}/` | Update customer |
+| DELETE | `/api/customers/{id}/` | Delete customer |
 
 ### Ledger Entries
 
-* `GET /api/customers/{customer_id}/entries/` – List all entries for a customer
-* `POST /api/customers/{customer_id}/entries/` – Add a credit/debit entry
+**List / Add entries:**
+`GET / POST /api/customers/{customer_id}/entries/`
 
 **Filters:**
 
@@ -156,9 +167,9 @@ This API uses **Token Authentication**. After registering or logging in, include
 
 ### Customer Summary
 
-* `GET /api/customers/{customer_id}/summary/`
+`GET /api/customers/{customer_id}/summary/`
 
-**Response Example:**
+**Response example:**
 
 ```json
 {
@@ -171,27 +182,15 @@ This API uses **Token Authentication**. After registering or logging in, include
 
 ---
 
-## Postman Collection
+## 🧪 Postman Collection
 
-A Postman collection is included in the repository to test all APIs easily.
+A Postman collection is included in the root directory to test all endpoints.
 
-**File:** `Mini Ledger API.postman_collection.json`
-
-1. Import the collection into Postman.
-2. Login using **Auth → Login**.
-3. Token is usually saved to a variable or must be copied to headers.
-4. Test Customers, Ledger, and Summary APIs.
+* **File:** `Mini Ledger API.postman_collection.json`
+* **Usage:** Import into Postman, use the Login endpoint, and the token will be applied automatically to subsequent requests.
 
 ---
 
-## Notes
-
-* **Privacy:** Each user can access only their own customers and ledger entries.
-* **Database:** SQLite is used for simplicity and ease of setup.
-* **Purpose:** This project is intended for learning and evaluation purposes.
-
----
-
-## Author
+## ✍️ Author
 
 **Redwan Ahmed Utsab**
